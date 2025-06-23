@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: biblioteca-app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - biblioteca
+
+  db:
+    image: mariadb:10.11
+    container_name: biblioteca-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: biblioteca
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_USER: senai
+      MYSQL_PASSWORD: 12345678
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - biblioteca
+
+volumes:
+  db_data:
+
+networks:
+  biblioteca:
